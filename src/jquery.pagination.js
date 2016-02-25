@@ -125,12 +125,12 @@
       }
 
       if( np > this.opts.num_display_entries + this.opts.num_edge_entries) {
-        fragment.prepend("<label>" + this.opts.total_text + np + this.opts.page_text + "</label>")
+        fragment.prepend("<label class='total'>" + this.opts.total_text + np + this.opts.page_text + "</label>")
       }
 
       // Generate "Go"-Link
       if(this.opts.jump_switch) {
-        fragment.append("<label> <input name='go-page'> </label> <button type='number'>" + this.opts.go_text + "</button>")
+        fragment.append("<div class='handler'><input type='text' name='go-page'><button class='btn' type='number'>" + this.opts.go_text + "</button></div>")
       }
 
       $('a', fragment).click(eventHandler);
