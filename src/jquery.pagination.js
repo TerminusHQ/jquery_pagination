@@ -147,10 +147,15 @@
         fragment.append("<div class='handler'><input type='text' name='go-page'><button class='btn' type='number'>" + this.opts.go_text + "</button></div>")
       }
 
-      $('a', fragment).click(eventHandler);
+      $('a', fragment).click(function(e){
+        eventHandler()
+        return false
+      });
+
       if (this.opts.page_size_switch) {
         $('select', fragment).change(function(e){
           eventHandler({current_page: 0})
+          return false
         });
       }
 
@@ -160,6 +165,8 @@
           if (!isNaN(current_page) && current_page > 0 && current_page <= np) {
             eventHandler({current_page: current_page - 1});
           }
+
+          return false
         });
       }
 
