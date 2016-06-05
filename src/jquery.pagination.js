@@ -92,6 +92,20 @@
         interval = this.pc.getInterval(current_page),
         np = this.pc.numPages(),
         fragment = $("<div class='pagination'></div>");
+
+      if(this.opts.page_size_switch) {
+
+        var selectDom = "<select>",
+            sizes = [10, 20, 30,40 ,50];
+
+        sizes.forEach((function(_this) {
+                  return function (i) {
+                    selectDom += '<option value="' + i + '"' + (_this.opts.items_per_page === i ? 'selected' : '') + '>' + i + '</option>'
+                  }
+                })(this));
+
+        fragment.append(selectDom += '</select>');
+      }
       // debugger;
       // Generate "Previous"-Link
       if(this.opts.prev_text && (current_page > 0 || this.opts.prev_show_always)){
@@ -134,12 +148,20 @@
       }
 
       $('a', fragment).click(eventHandler);
-      $('button', fragment).click(function(e){
-        var current_page = Number($.trim($('input[name=go-page]', fragment).val()));
-        if (!isNaN(current_page) && current_page > 0 && current_page < np) {
-          eventHandler({current_page: current_page - 1});
-        }
-      });
+      if (this.opts.page_size_switch) {
+        $('select', fragment).change(function(e){
+          eventHandler({current_page: 0})
+        });
+      }
+
+      if (this.opts.jump_switch){
+        $('button', fragment).click(function(e){
+          var current_page = Number($.trim($('input[name=go-page]', fragment).val()));
+          if (!isNaN(current_page) && current_page > 0 && current_page <= np) {
+            eventHandler({current_page: current_page - 1});
+          }
+        });
+      }
 
       return fragment;
     }
@@ -150,6 +172,7 @@
 
     // Initialize options with default values
     opts = $.extend({
+      page_size_switch:false,
       items_per_page:10,
       num_display_entries:11,
       current_page:0,
@@ -179,12 +202,15 @@
      * @param {int} page_id The new page number
      */
     function paginationClickHandler(evt){
+
       var links,
         new_current_page = $(evt.target).data('page_id') || evt.current_page || 0,
         continuePropagation = selectPage(new_current_page);
+
       if (!continuePropagation) {
         evt.stopPropagation();
       }
+
       return continuePropagation;
     }
 
@@ -196,13 +222,26 @@
      */
     function selectPage(new_current_page) {
       // update the link display of a all containers
+
+      // 避免后续的重新绘制删除用户操作痕迹，先取到用户选择的每页展现条数
+      var page_size = selectPageSize();
+
+      // 这部分重新绘制逻辑其实可以去掉，
+      // 和我们现在的实现--在回调中重新绘制分页器是重复的，
+      // 为了兼容可能使用了自带绘制更新方法的情况，暂且保留
       containers.data('current_page', new_current_page);
       links = renderer.getLinks(new_current_page, paginationClickHandler);
       containers.empty();
       links.appendTo(containers);
+
       // call the callback and propagate the event if it does not return false
-      var continuePropagation = opts.callback(new_current_page, containers);
+      var continuePropagation = opts.callback(new_current_page, page_size, containers);
       return continuePropagation;
+    }
+
+    //select pagesize setting
+    function selectPageSize() {
+      return links.find('select').val() || 20;
     }
 
     // -----------------------------------
@@ -250,6 +289,7 @@
 
     // When all initialisation is done, draw the links
     links = renderer.getLinks(current_page, paginationClickHandler);
+
     containers.empty();
     if(np > 1 || opts.show_if_single_page) {
       links.appendTo(containers);

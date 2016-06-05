@@ -64,6 +64,12 @@ callback
 	function. Instead, pre-load some content pages and switch between them with
 	this function.
 
+page_size_switch
+  Switch for user select items_per_page. Default: 20
+
+jump_switch
+  Switch for going any page.
+
 current_page
 	The page that is selected when the pagination is initialized. Default: 0
 
