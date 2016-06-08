@@ -148,7 +148,7 @@
       }
 
       $('a', fragment).click(function(e){
-        eventHandler()
+        eventHandler(e)
         return false
       });
 
