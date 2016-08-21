@@ -95,7 +95,7 @@
 
       if(this.opts.page_size_switch) {
 
-        var selectDom = "<select>",
+        var selectDom = '<label class="size">' + this.opts.switch_text + '</label>' + '<select>',
             sizes = [10, 20, 30,40 ,50];
 
         sizes.forEach((function(_this) {
@@ -106,7 +106,7 @@
 
         fragment.append(selectDom += '</select>');
       }
-      // debugger;
+
       // Generate "Previous"-Link
       if(this.opts.prev_text && (current_page > 0 || this.opts.prev_show_always)){
         fragment.append(this.createLink(current_page-1, current_page, {text:this.opts.prev_text, classes:"prev",rel:"prev"}));
@@ -138,8 +138,9 @@
         fragment.append(this.createLink(current_page+1, current_page, {text:this.opts.next_text, classes:"next",rel:"next"}));
       }
 
-      if( np > this.opts.num_display_entries + this.opts.num_edge_entries) {
-        fragment.prepend("<label class='total'>" + this.opts.total_text + np + this.opts.page_text + "</label>")
+      // 增加总共条目
+      if( this.opts.total_text && this.opts.item_text) {
+        fragment.prepend("<label class='total'>" + this.opts.total_text + this.maxentries + this.opts.item_text + "</label>")
       }
 
       // Generate "Go"-Link
