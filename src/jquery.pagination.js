@@ -258,7 +258,7 @@
     current_page = parseInt(opts.current_page, 10);
     containers.data('current_page', current_page);
     // Create a sane value for maxentries and items_per_page
-    maxentries = (!maxentries || maxentries < 0)?1:maxentries;
+    maxentries = (!maxentries || maxentries < 0)?0:maxentries;
     opts.items_per_page = (!opts.items_per_page || opts.items_per_page < 0)?1:opts.items_per_page;
 
     if(!$.PaginationRenderers[opts.renderer])
@@ -299,7 +299,7 @@
     links = renderer.getLinks(current_page, paginationClickHandler);
 
     containers.empty();
-    if(np > 1 || opts.show_if_single_page) {
+    if((np > 1 || opts.show_if_single_page) && maxentries > 0) {
       links.appendTo(containers);
     }
     // call callback function
