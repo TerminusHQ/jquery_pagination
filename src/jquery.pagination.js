@@ -96,11 +96,11 @@
       if(this.opts.page_size_switch) {
 
         var selectDom = '<label class="size">' + this.opts.switch_text + '</label>' + '<select>',
-            sizes = [10, 20, 30,40 ,50];
+            sizes = this.opts.page_sizes || [10, 20, 30,40 ,50];
 
         sizes.forEach((function(_this) {
                   return function (i) {
-                    selectDom += '<option value="' + i + '"' + (_this.opts.items_per_page === i ? 'selected' : '') + '>' + i + '</option>'
+                    selectDom += '<option value="' + i + '"' + (_this.opts.items_per_page === String(i) ? 'selected' : '') + '>' + i + '</option>'
                   }
                 })(this));
 
