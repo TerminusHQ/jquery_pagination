@@ -100,7 +100,7 @@
 
         sizes.forEach((function(_this) {
                   return function (i) {
-                    selectDom += '<option value="' + i + '"' + (_this.opts.items_per_page === String(i) ? 'selected' : '') + '>' + i + '</option>'
+                    selectDom += '<option value="' + i + '"' + (String(_this.opts.items_per_page) === String(i) ? 'selected' : '') + '>' + i + '</option>'
                   }
                 })(this));
 
