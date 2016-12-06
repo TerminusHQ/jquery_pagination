@@ -147,7 +147,7 @@
       if(this.opts.jump_switch) {
         var noText = this.opts.no_text ? "<label class='no-text'>" + this.opts.no_text + "</label>" : "";
         var pageText = this.opts.page_text ? "<label class='page-text'>" + this.opts.page_text + "</label>" : "";
-        fragment.append("<div class='handler'>" + noText + "<input type='text' name='go-page'>" + pageText + "<button class='btn' type='number'>" + this.opts.go_text + "</button></div>")
+        fragment.append("<div class='handler'>" + noText + "<input type='text' name='go-page'>" + pageText + "<button class='btn' type='button'>" + this.opts.go_text + "</button></div>")
       }
 
       $('a', fragment).click(function(e){
