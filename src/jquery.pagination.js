@@ -9,7 +9,7 @@
  * @param {Object} opts Several options (see README for documentation)
  * @return {Object} jQuery Object
  */
- (function($){
+(function($){
   /**
    * @class Class for calculating pagination values
    */
@@ -87,7 +87,7 @@
         this.createLink(i, current_page, opts).appendTo(container);
       }
     },
-    getLinks:function(current_page, eventHandler) {
+    getLinks:function(current_page, eventHandler, pageSize) {
       var begin, end,
         interval = this.pc.getInterval(current_page),
         np = this.pc.numPages(),
@@ -100,7 +100,7 @@
 
         sizes.forEach((function(_this) {
                   return function (i) {
-                    selectDom += '<option value="' + i + '"' + (String(_this.opts.items_per_page) === String(i) ? 'selected' : '') + '>' + i + '</option>'
+                    selectDom += '<option value="' + i + '"' + (String(pageSize || _this.opts.items_per_page) === String(i) ? 'selected' : '') + '>' + i + '</option>'
                   }
                 })(this));
 
@@ -236,11 +236,13 @@
       // 避免后续的重新绘制删除用户操作痕迹，先取到用户选择的每页展现条数
       var page_size = selectPageSize();
 
+      opts.items_per_page = page_size;
+
       // 这部分重新绘制逻辑其实可以去掉，
       // 和我们现在的实现--在回调中重新绘制分页器是重复的，
       // 为了兼容可能使用了自带绘制更新方法的情况，暂且保留
       containers.data('current_page', new_current_page);
-      links = renderer.getLinks(new_current_page, paginationClickHandler);
+      links = renderer.getLinks(new_current_page, paginationClickHandler, page_size);
       containers.empty();
       links.appendTo(containers);
 
@@ -251,7 +253,7 @@
 
     //select pagesize setting
     function selectPageSize() {
-      return links.find('select').val() || 20;
+      return links.find('select').val() || opts.items_per_page;
     }
 
     // -----------------------------------
